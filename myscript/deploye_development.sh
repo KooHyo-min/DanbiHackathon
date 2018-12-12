@@ -33,6 +33,3 @@ pyenv local DanbiHackathon
 # pip
 pip install --upgrade pip
 pip install --upgrade setuptools
-
-# pip requirements
-pip install -r requirements.txt
