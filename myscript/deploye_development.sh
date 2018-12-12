@@ -25,7 +25,7 @@ curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-
 pyenv update
 
 # virtualenv
-PYTHON_VERSION=3.7.0
+PYTHON_VERSION=3.5.6
 pyenv install $PYTHON_VERSION
 pyenv virtualenv $PYTHON_VERSION DanbiHackathon
 pyenv local DanbiHackathon
@@ -33,3 +33,7 @@ pyenv local DanbiHackathon
 # pip
 pip install --upgrade pip
 pip install --upgrade setuptools
+
+pip install flake8
+pip install pygame
+# https://files.pythonhosted.org/packages/ec/8c/acba4494370dd1f68af341a76084c4c1f10f1ca258a741ace4f526716935/pygame-1.9.4-cp35-cp35m-manylinux1_x86_64.whl
