@@ -2,11 +2,8 @@ import os
 import pygame
 
 
-class Menu:
-    margin_x = 35
-    margin_y = 100  # space between items(y axis)
+class Practice:
     text_color = (255, 255, 255)
-    selected_color = (0, 255, 255)
 
     def __init__(self, title, background_path, screen_res, font, coord):
         self.title = title
@@ -24,14 +21,19 @@ class Menu:
             self.items_font = pygame.font.Font(None, 18)
 
         self.title_coord = (0, 0)
-        if coord:
-            self.items_coord = (coord[0] + Menu.margin_x, coord[1] + Menu.margin_y)
-        else:
+        if not coord:
             self.items_coord = {
-                'challenge_bt': (-200, -300),
-                'practice_bt': (+200, -300),
-                'exit_bt': (-600, +350)
-            }
+                "back_bt": (25, 20),
+                "Story_PT_card_01": (60, 300),
+                "Story_PT_card_02": (300, 300),
+                "Story_PT_card_03": (540, 300),
+                "Story_PT_card_04": (780, 300),
+                "Story_PT_card_05": (1020, 300),
+                "Story_PT_card_06": (60, 530),
+                "Story_PT_card_07": (300, 530),
+                "Story_PT_card_08": (540, 530),
+                "Story_PT_card_09": (780, 530)
+             }
 
     def add_item(self, item_name, item):
         self.items.update({item_name: item})
@@ -43,7 +45,7 @@ class Menu:
         for item_name, item in self.items.items():
             center_xy = self.get_center_xy(screen, item)
             item_xy = self.items_coord[item_name]
-            result_xy = (center_xy[0]-item_xy[0], center_xy[1] - item_xy[1])
+            result_xy = (item_xy[0], item_xy[1])
             item_rect = screen.blit(item, result_xy)
             self.items_rect.update({item_name: item_rect})
 

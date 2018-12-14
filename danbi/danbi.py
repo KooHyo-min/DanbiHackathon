@@ -38,11 +38,9 @@ while RUN:
                 mic = sr.Microphone(device_index=sr.Microphone.list_microphone_names().index('default'))
                 harvard = sr.AudioFile(AUDIO_RES.format('LH_E101_Good Morning_1.wav'))
                 with mic as source:
-                    r.adjust_for_ambient_noise(source)
                     audio = r.record(source, duration=3)
                 pygame.display.flip()
                 result = r.recognize_google(audio)
-                print(result)
                 screen.fill(WHITE)
                 text = font2.render(result, True, (0, 40, 0))
                 textRect = text.get_rect()
