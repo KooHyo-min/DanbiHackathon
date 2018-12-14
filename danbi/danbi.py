@@ -5,8 +5,8 @@ import os
 import speech_recognition as sr
 
 WHITE = (255, 255, 255)
-IMG_RES = 'pygame/danbi/resources/images/{}'
-AUDIO_RES = 'pygame/danbi/resources/audio/{}'
+IMG_RES = 'danbi/resources/images/{}'
+AUDIO_RES = 'danbi/resources/audio/{}'
 RUN = True
 
 
@@ -23,13 +23,16 @@ loud_speaker = pygame.image.load(IMG_RES.format('loud_speaker.png'))
 while RUN:
     screen.fill(WHITE)
     screen.blit(background, (0,0))
-    screen.blit(loud_speaker, (0, 0))
+    screen.blit(loud_speaker, (300, 300))
     # 1) 사용자 입력 처리
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             RUN = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
+            print(loud_speaker.get_rect().collidepoint(x, y))
+            print(loud_speaker.get_rect())
+            print(event.pos)
             if loud_speaker.get_rect().collidepoint(x, y):
                 r = sr.Recognizer()
                 harvard = sr.AudioFile(AUDIO_RES.format('LH_E101_Good Morning_1.wav'))
