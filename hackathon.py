@@ -83,7 +83,7 @@ def main():
         'exit_bt': menu_exit_bt
     }
 
-    font = pygame.font.Font(None, 24)
+    font = pygame.font.Font(None, 50)
     main_menu = Menu('DanbiHackathon V0.1', menu_background_path, screen_res, None, None)
     for item_name, item in menu_items.items():
         main_menu.add_item(item_name, item)
@@ -194,10 +194,24 @@ def main():
                                          result_sc += part_sc
                                 except:
                                     pass
+                            if result_sc > 0:
+                                text = "Your Score : {}".format(str(int(result_sc)))
+                                text_0 = result
+                                text_result_0 = font.render(text_0, True, (0, 40, 0))
+                                textRect = text_result_0.get_rect()
+                                textRect.centerx = 1020
+                                textRect.centery = 250
+                                screen.blit(text_result_0, textRect)
+                            else:
+                                text = "RETRY!!!"
                         else:
-                            result_sc = 0
-                        print(result_sc and int(result_sc))
-                        print(result)
+                            text = "RETRY!!!"
+                        text_result = font.render(text, True, (0, 40, 0))
+                        textRect = text_result.get_rect()
+                        textRect.centerx = 1020
+                        textRect.centery = 300
+                        screen.blit(text_result, textRect)
+                        pygame.display.flip()
         while challenge:
             exit()
 
