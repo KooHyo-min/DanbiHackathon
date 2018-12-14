@@ -2,7 +2,6 @@ import pygame
 
 from menu import Menu
 
-
 text_color = (255, 255, 255)
 
 # screen variables
@@ -22,8 +21,6 @@ screen_res = max_screen_coord
 score_coord = (15, 50)
 time_coord = (15, 100)
 fps_coord = (15, 150)
-menu_coord = (screen_res[0] * 3 / 5, screen_res[1] / 5)
-next_tetromino_coord = (screen_res[0] / 10, (screen_res[1] / 10) * 6)
 
 
 def main():
@@ -48,35 +45,39 @@ def main():
     menu_practice_bt = pygame.image.load(menu_practice_bt_path)
     menu_exit_bt = pygame.image.load(menu_exit_bt_path)
 
-    menu_items = [menu_challenge_bt, menu_practice_bt, menu_exit_bt]
+    menu_items = {
+        'challenge_bt': menu_challenge_bt,
+        'practice_bt': menu_practice_bt,
+        'exit_bt': menu_exit_bt
+    }
 
     font = pygame.font.Font(None, 24)
-    main_menu = Menu('DanbiHackathon', menu_background_path, screen_res, None, menu_coord)
-    for item in menu_items:
-        main_menu.add_item(item)
-
+    main_menu = Menu('DanbiHackathon V0.1', menu_background_path, screen_res, None, None)
+    for item_name, item in menu_items.items():
+        main_menu.add_item(item_name, item)
 
     while True:
         display_menu = True
+        practice = False
+        challenge = False
         while display_menu:
             main_menu.show(screen)
             pygame.display.flip()
             event = pygame.event.wait()
             user_input = main_menu.check_input(event)
-            if user_input == menu_items[0]:
-                exit()
-            elif user_input == menu_items[1]:
-                exit()
-            elif user_input == menu_items[2] or event.type == pygame.QUIT:  # quit
+            if user_input == 'challenge_bt':
+                display_menu = False
+                challenge = True
+            elif user_input == 'practice_bt':
+                display_menu = False
+                practice = True
+            elif user_input == 'exit_bt' or event.type == pygame.QUIT:  # quit
                 exit()
 
-            # event = pygame.event.wait()
-            # user_input = main_menu.check_input(event)
-
-            # if user_input == menu_items[0]:
-            #     display_menu = False
-            # elif user_input == menu_items[1] or event.type == pygame.QUIT:  # quit
-            #     exit()
+        while practice:
+            exit()
+        while challenge:
+            exit()
 
 
 if __name__ == '__main__':

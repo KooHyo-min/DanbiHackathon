@@ -12,7 +12,7 @@ RUN = True
 
 
 pygame.init()
-screen = pygame.display.set_mode((1920, 1080))
+screen = pygame.display.set_mode((1024, 768))
 pygame.display.set_caption("Danbi")
 font = pygame.font.Font(None, 24)
 font2 = pygame.font.Font(None, 50)
@@ -23,26 +23,26 @@ loud_speaker = pygame.image.load(IMG_RES.format('loud_speaker.png'))
 while RUN:
     screen.fill(WHITE)
     screen.blit(background, (0,0))
-    screen.blit(loud_speaker, (300, 300))
+    screen.blit(loud_speaker, (0, 0))
     # 1) 사용자 입력 처리
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             RUN = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
-            print(loud_speaker.get_rect().collidepoint(x, y))
-            print(loud_speaker.get_rect())
-            print(event.pos)
             if loud_speaker.get_rect().collidepoint(x, y):
-                r = sr.Recognizer()
-                harvard = sr.AudioFile(AUDIO_RES.format('LH_E101_Good Morning_1.wav'))
-                with harvard as source:
-                    r.adjust_for_ambient_noise(source)
-                    audio = r.record(source, duration=6)
                 left = font.render("SayHoHo!", True, (0, 0, 0))
                 screen.blit(left, (100, 100))
                 pygame.display.flip()
+                r = sr.Recognizer()
+                mic = sr.Microphone(device_index=sr.Microphone.list_microphone_names().index('default'))
+                harvard = sr.AudioFile(AUDIO_RES.format('LH_E101_Good Morning_1.wav'))
+                with mic as source:
+                    r.adjust_for_ambient_noise(source)
+                    audio = r.record(source, duration=3)
+                pygame.display.flip()
                 result = r.recognize_google(audio)
+                print(result)
                 screen.fill(WHITE)
                 text = font2.render(result, True, (0, 40, 0))
                 textRect = text.get_rect()

@@ -39,6 +39,7 @@ pip install pygame
 # https://files.pythonhosted.org/packages/ec/8c/acba4494370dd1f68af341a76084c4c1f10f1ca258a741ace4f526716935/pygame-1.9.4-cp35-cp35m-manylinux1_x86_64.whl
 
 pip install SpeechRecognition
+sudo apt install libasound-dev portaudio19-dev libportaudiocpp0
 pip install --upgrade pyaudio
 sudo apt-get install python-pyaudio python3-pyaudio
 
