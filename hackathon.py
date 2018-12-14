@@ -1,11 +1,15 @@
 from copy import deepcopy
+from time import sleep
 
 import pygame
 
 from menu import Menu
 from practice import Practice
 from popup import Popup
+from challenge import Challenge
 import speech_recognition as sr
+
+
 
 text_color = (255, 255, 255)
 
@@ -77,6 +81,8 @@ def main():
     menu_practice_bt = pygame.image.load(menu_practice_bt_path)
     menu_exit_bt = pygame.image.load(menu_exit_bt_path)
 
+    challenge_background_path = img_res_path.format('challenge_bg.png')
+
     menu_items = {
         'challenge_bt': menu_challenge_bt,
         'practice_bt': menu_practice_bt,
@@ -110,6 +116,25 @@ def main():
         "exit_bt": menu_exit_bt
     }
 
+
+    challenge_game = Challenge('DanbiHackathon V0.1', challenge_background_path, screen_res, None, None)
+    Story_ch_card_01_image_path = img_res_path.format('Story_ch_card_01_image.png')
+    Story_ch_card_01_text_path = img_res_path.format('Story_ch_card_01_text.png')
+    Story_ch_card_01_image = pygame.image.load(Story_ch_card_01_image_path)
+    Story_ch_card_01_text = pygame.image.load(Story_ch_card_01_text_path)
+
+    challenge_bg_nice_path = img_res_path.format('challenge_bg_nice.png')
+    challenge_bg_nice = pygame.image.load(challenge_bg_nice_path)
+    challenge_items = {
+        "practice_pu_mic": practice_pu_mic,
+        "exit_bt": menu_exit_bt,
+        "Story_ch_card_01_image": Story_ch_card_01_image,
+        "Story_ch_card_01_text": Story_ch_card_01_text
+    }
+
+    for item_name, item in challenge_items.items():
+        challenge_game.add_item(item_name, item)
+
     while True:
         display_menu = True
         practice = False
@@ -122,6 +147,8 @@ def main():
             if user_input == 'challenge_bt':
                 display_menu = False
                 challenge = True
+                challenge_game.show(screen)
+                pygame.display.flip()
             elif user_input == 'practice_bt':
                 display_menu = False
                 practice = True
@@ -140,8 +167,6 @@ def main():
                 exit()
             elif user_input and user_input.startswith('Story'):
                 popup = True
-                # practice = False
-                # display_menu = False
                 game_popup = Popup('DanbiHackathon V0.1', popup_bg_path, screen_res, None, None)
                 text_name = '{}_text'.format(user_input)
                 image_name = '{}_image'.format(user_input)
@@ -212,8 +237,77 @@ def main():
                         textRect.centery = 300
                         screen.blit(text_result, textRect)
                         pygame.display.flip()
+
         while challenge:
-            exit()
+            event = pygame.event.wait()
+            user_input = challenge_game.check_input(event)
+            if user_input == 'exit_bt':
+                display_menu = True
+                challenge = False
+            elif event.type == pygame.QUIT:
+                exit()
+            elif user_input == 'Story_ch_card_01_text':
+                pygame.mixer.music.load('resources/audio/Story_PT_card_01_audio.wav')
+                pygame.mixer.music.set_volume(0.5)
+                pygame.mixer.music.play()
+            elif user_input == 'practice_pu_mic':
+                challenge_game.add_item("practice_pu_mic_effect", practice_pu_mic_effect)
+                challenge_game.show(screen)
+                pygame.display.flip()
+                r = sr.Recognizer()
+                mic = sr.Microphone(device_index=sr.Microphone.list_microphone_names().index('default'))
+                with mic as source:
+                    audio = r.record(source, duration=3)
+                try:
+                    result = r.recognize_google(audio)
+                except:
+                    result = None
+
+                challenge_game.remove_item("practice_pu_mic_effect")
+                challenge_game.show(screen)
+                pygame.display.flip()
+                if result:
+                    full = "alligator"
+                    part_sc = 100 / len(full)
+                    result_sc = 0
+                    for i in range(len(full)):
+                        try:
+                            if result[i] == full[i]:
+                                 result_sc += part_sc
+                        except:
+                            pass
+                    if result_sc > 0:
+                        if result_sc >= 60:
+                            text = None
+                            for key in challenge_items.keys():
+                                challenge_game.remove_item(key)
+                            challenge_game.add_item("challenge_bg_nice", challenge_bg_nice)
+                            challenge_game.show(screen)
+                            pygame.display.flip()
+                            sleep(1)
+                            challenge_game.remove_item("challenge_bg_nice")
+                            for item_name, item in challenge_items.items():
+                                challenge_game.add_item(item_name, item)
+                            challenge_game.show(screen)
+                        else:
+                            text = "Your Score : {}".format(str(int(result_sc)))
+                            text_0 = result
+                            text_result_0 = font.render(text_0, True, (0, 40, 0))
+                            textRect = text_result_0.get_rect()
+                            textRect.centerx = 800
+                            textRect.centery = 250
+                            screen.blit(text_result_0, textRect)
+                    else:
+                        text = "RETRY!!!"
+                else:
+                    text = "RETRY!!!"
+                if text:
+                    text_result = font.render(text, True, (0, 40, 0))
+                    textRect = text_result.get_rect()
+                    textRect.centerx = 800
+                    textRect.centery = 300
+                    screen.blit(text_result, textRect)
+                pygame.display.flip()
 
 
 if __name__ == '__main__':
