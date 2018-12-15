@@ -28,7 +28,7 @@ class Challenge:
                 "practice_pu_mic_effect": (-160, 20),
                 "practice_pu_mic": (-160, -150),
                 'exit_bt': (-600, +350),
-                'challenge_bg_nice': (0, 0)
+                'challenge_bg_nice': (160, -70)
              }
 
     def add_item(self, item_name, item):
